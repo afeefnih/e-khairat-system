@@ -27,6 +27,7 @@ Route::get('/dashboard', function () {
 
 Route::get('/get/banks/fpx', [FeeController::class, 'getBankFpx'])->name('get::banks');
 Route::get('/Create/fee/{user}', [FeeController::class, 'createFee'])->name('create::Fee');
+Route::get('/bill/payment/link/{bill_code}', [FeeController::class, 'billPaymentLink'])->name('bill::payment::link');
 
 
 

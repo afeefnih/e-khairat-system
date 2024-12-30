@@ -15,12 +15,12 @@
                 <div class="bg-white shadow-sm rounded-lg p-6">
                     <h2 class="text-xl font-semibold text-gray-800">Your Details</h2>
                     <ul class="mt-4 text-gray-600 space-y-2">
-                        <li><strong>Full Name:</strong> {{ auth()->user()->Full_Name }}</li>
-                        <li><strong>Email:</strong> {{ auth()->user()->Email }}</li>
-                        <li><strong>IC Number:</strong> {{ auth()->user()->IC_Num }}</li>
-                        <li><strong>Phone:</strong> {{ auth()->user()->Tel_Num }}</li>
-                        <li><strong>Residency Status:</strong> {{ auth()->user()->Residency_Stat }}</li>
-                        <li><strong>Age:</strong> {{ auth()->user()->Age }}</li>
+                        <li><strong>Full Name:</strong> {{ auth()->user()->full_name }}</li>
+                        <li><strong>Email:</strong> {{ auth()->user()->email }}</li>
+                        <li><strong>IC Number:</strong> {{ auth()->user()->ic_num }}</li>
+                        <li><strong>Phone:</strong> {{ auth()->user()->tel_num }}</li>
+                        <li><strong>Residency Status:</strong> {{ auth()->user()->residency_stat }}</li>
+                        <li><strong>Age:</strong> {{ auth()->user()->age }}</li>
                     </ul>
                 </div>
 
