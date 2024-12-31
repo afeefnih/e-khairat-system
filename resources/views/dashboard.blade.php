@@ -34,7 +34,7 @@
                 <div class="bg-white shadow-sm rounded-lg p-6">
                     <h2 class="text-xl font-semibold text-gray-800">Quick Links</h2>
                     <ul class="mt-4 text-gray-600 space-y-2">
-                        <li><a href="#" class="text-blue-500 hover:underline">Update Profile</a></li>
+                        <li><a href="{{route('profile.edit')}}" class="text-blue-500 hover:underline">Update Profile</a></li>
                         <li><a href="#" class="text-blue-500 hover:underline">View Payments</a></li>
                         <li><a href="#" class="text-blue-500 hover:underline">Make a Donation</a></li>
                     </ul>

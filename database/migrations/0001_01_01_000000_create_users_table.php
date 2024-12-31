@@ -26,6 +26,10 @@ return new class extends Migration
             $table->string('residency_stat'); // Residency status
             $table->timestamp('registration_date')->useCurrent(); // Registration date
             $table->boolean('is_admin')->default(0); // 1 for admin, 0 for regular user
+            $table->string('payment_status')->default('unpaid'); // Add payment status
+            $table->string('transaction_id')->nullable(); // Store ToyyibPay transaction ID
+        $table->string('bill_code')->nullable();      // Store ToyyibPay bill code
+
             $table->timestamps(); // Laravel's created_at and updated_at
         });
 
