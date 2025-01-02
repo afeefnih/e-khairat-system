@@ -20,7 +20,8 @@ class FeeController extends Controller
 {
     $user = User::findOrFail($user_id);
 
-    $code = config('toyyibpay.code');
+    $code = config('toyyibpay.category_codes.dana_khairat');
+
     $amount = 100 * 100; // RM100
 
     $bill_object = [
@@ -37,8 +38,11 @@ class FeeController extends Controller
         'billReturnUrl' => route('payment.return'), // User-facing URL
     ];
 
+
+
     $data = Toyyibpay::createBill($code, (object) $bill_object);
     $bill_code = $data[0]->BillCode;
+
 
     return redirect()->route('bill::payment::link', $bill_code);
 }
