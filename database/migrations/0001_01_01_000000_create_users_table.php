@@ -33,17 +33,6 @@ return new class extends Migration
             $table->timestamps(); // Laravel's created_at and updated_at
         });
 
-                // register dependents table
-                // Example migration for dependents table
-        Schema::create('dependents', function (Blueprint $table) {
-            $table->id('dependent_id');
-            $table->foreignId('No_Ahli')->constrained('users')->onDelete('cascade'); // This links the dependent to a user
-            $table->string('full_name');
-            $table->string('relationship');
-            $table->integer('age');
-            $table->string('ic_number');
-            $table->timestamps();
-        });
 
 
 

@@ -54,8 +54,10 @@ Route::get('/get/banks/fpx', [FeeController::class, 'getBankFpx'])->name('get::b
 Route::get('/Create/fee/{user}', [FeeController::class, 'createFee'])->name('create::Fee');
 
 // Profile Routes
-Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit')->middleware('auth');
-Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update')->middleware('auth');
+Route::middleware('auth')->group(function () {
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+});
 
 // Fallback Route for Registration
 Route::post('/register', [AuthController::class, 'register']);

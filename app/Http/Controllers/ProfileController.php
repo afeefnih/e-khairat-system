@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -26,7 +25,7 @@ class ProfileController extends Controller
         $validatedData = $request->validate([
             'full_name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . $user->id, // Exclude the current user's email
-            'ic_num' => 'required|string|max:255|unique:users,ic_num,' . $user->id, // Exclude the current user's IC number
+'ic_num' => 'required|string|max:255|unique:users,ic_num,' . $user->id, // Exclude the current user's IC number
             'address' => 'required|string|max:255',
             'tel_num' => 'required|string|max:15',
             'age' => 'required|integer',
