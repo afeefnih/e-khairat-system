@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use App\Models\Dependent;
 use App\Models\User;
 
 class AuthController extends Controller
@@ -45,8 +46,8 @@ class AuthController extends Controller
         // Log the user in
         Auth::login($user);
 
-        // Redirect to dashboard
-        return redirect()->route('create::Fee',$user);
+      // Redirect the user to the "Add Dependent" page
+    return redirect()->route('dependent.add', $user->id);
     }
 
     public function registerDependent(Request $request)

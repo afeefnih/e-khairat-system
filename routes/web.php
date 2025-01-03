@@ -5,6 +5,7 @@ use App\Http\Controllers\GuestController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\FeeController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\DependentController;
 
 // Home Routes
 Route::get('/', function () {
@@ -46,6 +47,12 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware('auth')->name('dashboard');
 
+
+
+// Route to add dependents
+Route::get('/dependent/add/{user}', [DependentController::class, 'addDependentPage'])->name('dependent.add');
+Route::post('/dependent/store/{user}', [DependentController::class, 'storeDependent'])->name('dependent.store');
+
 // Payment Routes (Fees)
 Route::post('/payment/callback', [FeeController::class, 'paymentCallback'])->name('payment.callback'); // Callback for fee payments
 Route::get('/payment/return', [FeeController::class, 'paymentReturn'])->name('payment.return'); // Return URL after fee payment
@@ -55,9 +62,15 @@ Route::get('/Create/fee/{user}', [FeeController::class, 'createFee'])->name('cre
 
 // Profile Routes
 Route::middleware('auth')->group(function () {
-    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+    // Profile and dependent routes
+Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+Route::post('/profile/dependent/add', [ProfileController::class, 'addDependent'])->name('Newdependent.store');
+Route::post('/profile/dependent/update/{id}', [ProfileController::class, 'updateDependent'])->name('dependent.update');
+Route::delete('/profile/dependent/delete/{id}', [ProfileController::class, 'deleteDependent'])->name('dependent.delete');
 });
+
+
 
 // Fallback Route for Registration
 Route::post('/register', [AuthController::class, 'register']);
