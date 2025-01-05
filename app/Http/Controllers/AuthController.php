@@ -18,6 +18,8 @@ class AuthController extends Controller
 
     public function registerPost(Request $request)
     {
+
+//dd($request->all());
         $validatedData = $request->validate([
             'full_name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email',
@@ -74,6 +76,27 @@ class AuthController extends Controller
         // After storing dependents, proceed to next step or redirect
         return redirect()->route('dashboard'); // Change this to the next appropriate route
     }
+
+    public function invoice(User $user)
+{
+    $dependents = $user->dependents; // Fetch all dependents for the user
+    $registrationFee = 100.00; // Set your registration fee
+
+    return view('registration.invoice', compact('user', 'dependents', 'registrationFee'));
+}
+
+public function processInvoice(Request $request, $user_id)
+{
+    // Validate that the "agree" checkbox is checked
+    $request->validate([
+        'agree' => 'required|accepted', // Ensures the checkbox is checked and has a valid value
+    ]);
+
+    // Redirect to the payment gateway or fee creation route with a success message
+    return redirect()->route('create::Fee', $user_id)->with('success', 'Invoice confirmed successfully. Proceed to payment.');
+}
+
+
 
     // Final Step: Complete the registration
 

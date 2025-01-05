@@ -33,7 +33,7 @@
                 </div>
                 <div class="px-5 py-4 flex items-center gap-3">
                     <img class="w-[30px] h-[30px]" src="https://via.placeholder.com/30x30" />
-                    <a href="#" class="text-black text-base font-medium">
+                    <a href="{{ route('password.change.form') }}" class="text-black text-base font-medium">
                         Tukar Katalaluan
                     </a>
                 </div>

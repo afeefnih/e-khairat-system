@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Toyyibpay;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 use App\Models\Donation;
 
 class GuestController extends Controller
@@ -53,7 +54,7 @@ class GuestController extends Controller
             'billCallbackUrl' => route('donation.callback'), // Callback for payment status
             'billReturnUrl' => route('donation.return'), // Redirect after payment
         ];
-
+//
         try {
             // Create the bill via ToyyibPay API
             $data = Toyyibpay::createBill($code, (object) $bill_object);
@@ -63,7 +64,7 @@ class GuestController extends Controller
             Donation::create([
                 'bill_code' => $bill_code,
                 'amount' => $validatedData['amount'],
-                'status' => 'pending',
+                'status_id' => 'testing',
             ]);
 
             // Redirect to payment link
@@ -76,31 +77,40 @@ class GuestController extends Controller
     }
 
     // Callback for donation payment
+    // Callback for donation payment
     public function donationCallback(Request $request)
     {
         Log::info('ToyyibPay Donation Callback Received:', $request->all());
 
-        $status = $request->input('status'); // 1 = Success, 2 = Pending, 3 = Failed
+        // Retrieve parameters from the callback request
+        $status = $request->input('status_id'); // 1 = Success, 2 = Pending, 3 = Failed
         $billCode = $request->input('billcode');
         $amount = $request->input('amount'); // Amount paid
 
-        // Find the donation by bill_code
-        $donation = Donation::where('bill_code', $billCode)->first();
+        // Update the donation's payment status using Query Builder
+        $updateResult = DB::table('donations')
+            ->where('bill_code', $billCode)
+            ->update([
+                'status_id' => $status == 1 ? 'paid' : ($status == 3 ? 'failed' : 'pending'),
+            ]);
 
-        if (!$donation) {
-            Log::error('Donation not found for Bill Code: ' . $billCode);
-            return response('Donation not found', 404);
+        if (!$updateResult) {
+            // Log an error if no rows were updated
+            Log::error('Failed to update donation status for Bill Code: ' . $billCode);
+            return response('Donation not found or update failed', 404);
         }
 
-        // Update donation's payment status based on the callback
-        $donation->status = $status == 1 ? 'paid' : ($status == 2 ? 'pending' : 'failed');
-        $donation->save();
-
-        Log::info('Donation status updated', ['donation_id' => $donation->id, 'status' => $donation->status]);
+        // Log the update for debugging purposes
+        Log::info('Donation status updated', [
+            'bill_code' => $billCode,
+            'status_id' => $status == 1 ? 'paid' : ($status == 3 ? 'failed' : 'pending'),
+        ]);
 
         // Return a success response to ToyyibPay
         return response('Donation processed', 200);
     }
+
+
 
     // Return URL handler for donations
     public function donationReturn(Request $request)
@@ -123,6 +133,7 @@ class GuestController extends Controller
     public function billPaymentLink($bill_code)
     {
         $data = Toyyibpay::billPaymentLink($bill_code);
+
         return redirect($data);
     }
 }

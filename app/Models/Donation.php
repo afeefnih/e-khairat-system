@@ -12,6 +12,6 @@ class Donation extends Model
     protected $fillable = [
         'bill_code',
         'amount',
-        'status',
+        'status_id',
     ];
 }

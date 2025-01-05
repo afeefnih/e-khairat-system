@@ -74,7 +74,7 @@
     </form>
 
     <!-- Existing Dependents Section -->
-    <h2 class="text-lg font-semibold mt-10 mb-4">Senarai Tangungan</h2>
+    <h2 id="tambah-tanggungan" class="text-lg font-semibold mt-10 mb-4 ">Senarai Tangungan</h2>
 
     <div class="bg-white shadow-md rounded-lg overflow-hidden">
         <table class="min-w-full divide-y divide-gray-200 table-auto">
@@ -113,13 +113,11 @@
                             {{ $dependent->ic_number }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
-                            <!-- Edit Button -->
-                            <a href="#" class="text-blue-600 hover:text-blue-900">
+                            <a href="{{ route('dependents.edit', $dependent->id) }}" class="text-blue-600 hover:text-blue-900">
                                 Edit
                             </a>
 
-                            <!-- Delete Button -->
-                            <form action="#" method="POST" class="inline">
+                            <form action="{{ route('dependents.delete', $dependent->id) }}" method="POST" class="inline">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="text-red-600 hover:text-red-900">
@@ -127,6 +125,7 @@
                                 </button>
                             </form>
                         </td>
+
                     </tr>
                 @empty
                     <tr>
@@ -139,3 +138,15 @@
         </table>
     </div>
 </div>
+
+    <script>
+    document.querySelectorAll('form[method="POST"]').forEach(form => {
+        form.addEventListener('submit', function(e) {
+            if (!confirm('Are you sure you want to delete this dependent?')) {
+                e.preventDefault(); // Prevent form submission if user cancels
+            }
+        });
+    });
+
+
+</script>

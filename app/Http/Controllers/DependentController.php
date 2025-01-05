@@ -13,8 +13,9 @@ class DependentController extends Controller
     {
         // Fetch the user based on the ID
         $user = User::findOrFail($user_id);
+        $dependents = $user->dependents;
 
-        return view('Registration.dependent', compact('user'));
+        return view('Registration.dependent', compact('user', 'dependents'));
     }
 
     // Store the dependent in the database
@@ -42,6 +43,41 @@ class DependentController extends Controller
             ]);
         }
 
-        return redirect()->route('create::Fee', $user_id)->with('success', 'Dependents added successfully. Proceed to payment.');
+    return redirect()-> route('invoice.show',$user_id);
     }
+        //return redirect()->route('create::Fee', $user_id)->with('success', 'Dependents added successfully. Proceed to payment.');
+
+    public function editDependents(Dependent $dependent) // Renamed to match the route
+{
+    return view('dependents.edit', compact('dependent'));
+}
+
+
+    /**
+     * Update the dependent's details.
+     */
+    public function updateDependents(Request $request, Dependent $dependent)
+    {
+        $validatedData = $request->validate([
+            'full_name' => 'required|string|max:255',
+            'relationship' => 'required|string|max:255',
+            'age' => 'required|integer',
+            'ic_number' => 'required|string|max:12',
+        ]);
+
+        $dependent->update($validatedData);
+
+        return redirect()->route('profile.edit', ['#tambah-tanggungan'])->with('success', 'Dependent added successfully.');
+    }
+
+    public function deleteDependent(Dependent $dependent)
+    {
+        // Delete the dependent from the database
+        $dependent->delete();
+
+        // Redirect back with a success message
+        return redirect()->route('profile.edit', ['#tambah-tanggungan'])->with('success', 'Dependent deleted successfully!');
+    }
+
+
 }

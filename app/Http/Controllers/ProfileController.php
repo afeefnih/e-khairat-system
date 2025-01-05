@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
+
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Dependent;
@@ -69,36 +72,36 @@ class ProfileController extends Controller
             ]);
         }
 
-        return redirect()->route('profile.edit')->with('success', 'New dependents added successfully.');
+        return redirect()->route('profile.edit', ['#tambah-tanggungan'])->with('success', 'New dependents added successfully.');
     }
 
-    // Update an existing dependent
-    public function updateDependent(Request $request, $id)
-    {
-        $dependent = Dependent::findOrFail($id);
 
-        // Validate the dependent input
-        $validatedData = $request->validate([
-            'full_name' => 'required|string|max:255',
-            'relationship' => 'required|string|max:255',
-            'age' => 'required|integer',
-            'ic_number' => 'required|string|max:12',
-        ]);
+    public function showChangePasswordForm()
+{
+    return view('change-password');
+}
 
-        // Update dependent
-        $dependent->update($validatedData);
+public function changePassword(Request $request)
+{
+    // Validate the request data
+    $request->validate([
+        'current_password' => 'required',
+        'new_password' => 'required|min:8|confirmed',
+    ]);
 
-        return redirect()->route('profile.edit')->with('success', 'Dependent updated successfully.');
+    // Get the currently authenticated user
+    $user = Auth::user();
+
+    // Check if the current password matches
+    if (!Hash::check($request->current_password, $user->password)) {
+        return back()->withErrors(['current_password' => 'The current password is incorrect.']);
     }
 
-    // Delete a dependent
-    public function deleteDependent($id)
-    {
-        $dependent = Dependent::findOrFail($id);
+    // Update the user's password
+    $user->update([
+        'password' => Hash::make($request->new_password),
+    ]);
 
-        // Delete the dependent
-        $dependent->delete();
-
-        return redirect()->route('profile.edit')->with('success', 'Dependent deleted successfully.');
-    }
+    return redirect()->route('dashboard')->with('success', 'Password changed successfully.');
+}
 }

@@ -26,7 +26,9 @@ Route::get('/Infaq', [GuestController::class, 'GuestView3'])->name('Infaq');
 Route::post('/Infaq', [GuestController::class, 'processDonation'])->name('donation.process');
 
 // ToyyibPay callback for donations
-Route::post('/donation/callback', [GuestController::class, 'donationCallback'])->name('donation.callback');
+Route::post('http://e-khairat-system.test/donation/callback', [GuestController::class, 'donationCallback'])->name('donation.callback');
+
+
 
 // Return URL for donations
 Route::get('/donation/return', [GuestController::class, 'donationReturn'])->name('donation.return');
@@ -41,6 +43,10 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::get('/Register', [AuthController::class, 'registerStepAll'])->name('StepAll');
 Route::post('/Register', [AuthController::class, 'registerPost'])->name('register.post');
+
+Route::get('/invoice/{user}', [AuthController::class, 'invoice'])->name('invoice.show');
+Route::post('/invoice/{user}', [AuthController::class, 'processInvoice'])->name('invoice.process');
+
 
 // Dashboard Route
 Route::get('/dashboard', function () {
@@ -66,9 +72,17 @@ Route::middleware('auth')->group(function () {
 Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
 Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
 Route::post('/profile/dependent/add', [ProfileController::class, 'addDependent'])->name('Newdependent.store');
-Route::post('/profile/dependent/update/{id}', [ProfileController::class, 'updateDependent'])->name('dependent.update');
-Route::delete('/profile/dependent/delete/{id}', [ProfileController::class, 'deleteDependent'])->name('dependent.delete');
+
+// Route to edit dependents
+Route::get('/dependents/{dependent}/edit', [DependentController::class, 'editDependents'])->name('dependents.edit');
+
+Route::put('/dependents/{dependent}', [DependentController::class, 'updateDependents'])->name('dependents.update');
+
+Route::delete('/dependents/{dependent}', [DependentController::class, 'deleteDependent'])->name('dependents.delete');
 });
+
+Route::get('/password/change', [ProfileController::class, 'showChangePasswordForm'])->name('password.change.form')->middleware('auth');
+Route::post('/password/change', [ProfileController::class, 'changePassword'])->name('password.change')->middleware('auth');
 
 
 

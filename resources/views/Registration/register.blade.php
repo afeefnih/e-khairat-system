@@ -7,6 +7,15 @@
             </div>
         </div>
         <div class="px-[170px] py-10 bg-white shadow-md rounded-md max-w-7xl mx-auto">
+            @if ($errors->any())
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
             @include('components.profile-form', [
                 'action' => route('register.post'),
                 'method' => 'POST',

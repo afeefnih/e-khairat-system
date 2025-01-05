@@ -24,6 +24,8 @@ class FeeController extends Controller
 
     $amount = 100 * 100; // RM100
 
+
+
     $bill_object = [
         'billName' => 'Bayaran Pendaftaran E-Khairat',
         'billDescription' => $user->ic_num, // User's IC number
@@ -39,9 +41,11 @@ class FeeController extends Controller
     ];
 
 
-
     $data = Toyyibpay::createBill($code, (object) $bill_object);
+
+
     $bill_code = $data[0]->BillCode;
+
 
 
     return redirect()->route('bill::payment::link', $bill_code);
@@ -60,6 +64,8 @@ class FeeController extends Controller
         $orderID = $request->input('order_id'); // External reference (e.g., user ID)
         $amount = $request->input('amount');
         $transactionTime = $request->input('transaction_time');
+
+        dd($request->all());
 
         // Find the user or payment by external reference (order_id)
         $user = User::where('id', $orderID)->first();
